@@ -1,0 +1,11 @@
+from django.contrib import admin
+from django.contrib.auth import get_user_model
+
+from doorsale_site.admin import ModelAdmin
+
+
+class UserAdmin(ModelAdmin):
+    list_display = ('username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_staff', 'is_active',)
+    search_fields = ('username', 'first_name', 'last_name', 'email',)
+
+admin.site.register(get_user_model(), UserAdmin)

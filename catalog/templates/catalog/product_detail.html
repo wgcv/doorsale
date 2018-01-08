@@ -1,0 +1,133 @@
+{% extends catalog_template_name %}
+
+{% comment % } {% load pipeline %} {% endcomment %}
+{% load catalog_filters %}
+
+{% block catalog-content %}
+<div class="product-summary">
+	<h2>{{ product.name }}
+		{% if product.old_price %}
+		<span class="discount"> {{ product.get_discount }}% OFF</span>
+		{% endif %}
+	</h2>
+	<div class="product-description">
+		{{ product.gist }}
+	</div>
+	<div class="cart-summary">
+		<ul>
+			<li>
+				{% if product.quantity %}
+				<span class="in-stock">In Stock</span>
+				{% else %}
+				<span class="out-of-stock">Out of Stock</span>
+				{% endif %}
+			</li>
+			<li>
+				 <label>Brand:</label> <a href="{{ product.brand.get_absolute_url }}">{{ product.brand.name }}</a> 
+			</li>
+			<li>
+				{% if product.is_free_shipping %}
+				<div class="free-shipping">
+					Free Shipping
+				</div>
+				{% else %}
+				<label>Shpping cost:</label> {{ product.shipping_cost|currency:default_currency }}/Unit
+				{% endif %}
+			</li>
+			<li class="price">
+				{{ product.price|currency:default_currency }}
+				{% if product.old_price %}
+				<span class="old-price"> {{ product.old_price|currency:default_currency }}</span>
+				<span class="discount"> {{ product.get_discount }}% OFF</span>
+				{% endif %}
+			</li>
+			<li class="add-to-cart-summary">
+				<form id="add-to-cart-form" method="post" action="{% url 'sales_add_to_cart' %}" data-ajax="true" data-ajax-update="#basket-container" data-ajax-success="basketChanged();" data-ajax-complete="add_to_cart">
+					{% csrf_token %}
+					<label>Qty:</label>
+					<input name="product_id" type="hidden" value="{{ product.id }}"/>
+					<input name="quantity" type="text" value="1"/>
+					<button class="add-to-cart">
+						<i class="fa fa-shopping-cart"></i>Add to Cart
+					</button>
+					<button class="buy-now" onclick="javascript:$(this).closest('form').unbind('submit'); $(this).closest('form').submit();">
+						<i class="fa fa-money"></i>Buy Now
+					</button>
+				</form>
+			</li>
+		</ul>
+	</div>
+</div>
+<div id="product-show">
+	<div id="preview-container">
+		<img id="preview-zoom" src="{{ MEDIA_URL }}{{ product.pics.all.0.url }}"/>
+	</div>
+	{% with pics=product.pics.all %}
+	{% if pics|length > 1 %}
+	<div id="slides-container">
+		<a class="prev" href="#"><i class="fa fa-chevron-left"></i></a>
+		<a class="next" href="#"><i class="fa fa-chevron-right"></i></a>
+		<div id="pics-slideshow">
+			<ul>
+				{% for pic in pics %}
+				<li>
+					<img src="{{ MEDIA_URL }}{{ pic.url }}">
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	{% endif %}
+	{% endwith %}
+</div>
+<div id="product-details">
+	{% with specs=product.specs.all %}
+	<ul id="product-tabs">
+		<li>
+			<a href="#product-overview-tab">Overview</a>
+		</li>
+		{% if specs %}
+		<li>
+			<a href="#product-specs-tab">Specifications</a>
+		</li>
+		{% endif %}
+	</ul>
+	<div id="product-overview-tab">
+		{{ product.description }}
+	</div>
+	{% if specs %}
+	<div id="product-specs-tab">
+		<table>
+			{% for spec in specs %}
+			<tr>
+				<td>{{ spec.name }}</td>
+				<td>{{ spec.value }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	{% endif %}
+	{% endwith %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+{% javascript 'product_detail' %}
+{% javascript 'product_detail' %}
+<script type="text/javascript">
+	// Expanding to sub category been selected
+	expandCategories('{{ product.category_id }}');
+
+	// Generating tabs
+	$('#product-details').tabs(); 
+
+	function add_to_cart(data) {
+		if(data.status == 200) {
+			// success message
+		} else {
+			alert(data.responseText);
+		}
+	}
+</script>
+{% endblock %}
