@@ -7,6 +7,9 @@
 
 {% block head %}
 {{ block.super }}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
 <meta name="application-name" content="{{ SITE_NAME }}"/>
 <meta name="copyright" content="{{ COPYRIGHT }}"/>
 <meta name="description" content="{{ page_description|default:SITE_DESCRIPTION }}"/>
@@ -46,6 +49,16 @@
 		<li><a href="{% url 'accounts_register' %}" title="Register to shop faster and better!">Register</a></li>
 		{% endif %}
 		{% endblock %}
+		<li class="nav-item dropdown d-md-none  d-lg-none d-xl-none">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				  Dropdown link
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				  <a class="dropdown-item" href="#">Action</a>
+				  <a class="dropdown-item" href="#">Another action</a>
+				  <a class="dropdown-item" href="#">Something else here</a>
+				</div>
+			  </li>
 	</ul>
 	{% endblock %}
 </header>
@@ -66,7 +79,7 @@
 	{% endblock %}
 </footer>
 {% block scripts %}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script>
 {% javascript 'base' %}
 {% endblock %}
