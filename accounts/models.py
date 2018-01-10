@@ -108,7 +108,7 @@ class AbstractUser(_AbstractUser):
     An abstract class extending Django authentication user model for Doorsale.
     """
 
-    birth_date = models.DateField(null=True, blank=True)
+    # birth_date = models.DateField(null=True, blank=True)
     is_verified = models.BooleanField(default=True)
     verify_code = models.CharField(max_length=512, blank=True, null=True,
                                    help_text='User account verification code.', editable=False)
