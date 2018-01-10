@@ -177,6 +177,8 @@ PIPELINE = {
         'catalog': {
             'source_filenames': (
                 'catalog/css/catalog.less',
+                'doorsale/css/bootstrap.min.css',
+
             ),
             'output_filename': 'catalog/css/catalog.css'
         },
@@ -212,7 +214,9 @@ PIPELINE = {
         'base': {
             'source_filenames': (
                 'doorsale/scripts/jquery-ajax.js',
-                'doorsale/scripts/jquery-utils.js',
+               # 'doorsale/scripts/jquery-utils.js',
+                'doorsale/scripts/popper.js',
+                'doorsale/scripts/bootstrap.js',
             ),
             'output_filename': 'doorsale/scripts/base.js',
         },
