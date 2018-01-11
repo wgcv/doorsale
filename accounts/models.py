@@ -27,7 +27,7 @@ class UserManager(_UserManager):
                                          verify_code=verify_code,
                                          updated_by=email,
                                          created_by=email,
-                                         # is_active=True,
+                                         is_active=True,
                                          **extra_fields)
         else:
             user = self.create_user(username=email,
@@ -39,7 +39,7 @@ class UserManager(_UserManager):
                                     verify_code=verify_code,
                                     updated_by=email,
                                     created_by=email,
-                                    # is_active=True,
+                                    is_active=False,
                                     **extra_fields)
         return user
 
@@ -94,7 +94,7 @@ class AbstractUser(_AbstractUser):
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.CharField(max_length=100)
     terms_condition = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     objects = UserManager()
 
     REQUIRED_FIELDS = ['email', 'updated_by', 'created_by']

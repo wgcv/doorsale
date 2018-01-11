@@ -51,7 +51,10 @@
                 <form method="post" action="{% url 'sales_checkout_cart' %}">
                     {% csrf_token %}
                     <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <label name="quantity" class="quantity" style="color:  black;">{{ item.quantity }}</label>
+                    {% comment %}
                     <input name="quantity" type="text" class="quantity" value="{{ item.quantity }}" onchange="javascript:$(this).closest('form').submit();"/>
+                    {% endcomment %}
                     {% if product.quantity %}
                     <br/>
                     <span class="in-stock">In Stock</span>
