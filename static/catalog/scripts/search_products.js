@@ -1,0 +1,2 @@
+$("#advance-search-filter").click(function(){var a=$(".advance-search-option")
+a.is(":visible")?(a.fadeOut(200),$('input[type="text"]',a).val(""),$("select",a).val(""),$(".fa-search-minus").removeClass("fa-search-minus").addClass("fa-search-plus")):(a.fadeIn(200),$(".fa-search-plus").removeClass("fa-search-plus").addClass("fa-search-minus"))}),$('.advance-search-option input[type="text"], .advance-search-option select').each(function(){""!=$(this).val()&&$(".advance-search-option").show()})

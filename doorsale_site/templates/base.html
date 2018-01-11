@@ -23,13 +23,6 @@
 {% endblock %}
 <title>{{ page_title|default:SITE_TITLE }} | {{ SITE_NAME }}</title>
 <link rel="icon shortcut" href="{% static 'img/icon.png' %}" type="image/png"/>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 {% block styles %}
 {% stylesheet style_name %}
@@ -86,11 +79,8 @@
 	{% endblock %}
 </footer>
 {% block scripts %}
-<<<<<<< HEAD
-=======
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script>
->>>>>>> fb3908bb80deb4e1af4c1792dd1fddf6ab6a5525
 {% javascript 'base' %}
 {% endblock %}
 {% endblock %}

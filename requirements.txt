@@ -4,6 +4,7 @@ cffi==1.11.2
 chardet==3.0.4
 cryptography==2.1.4
 Django==1.10.5
+django-extensions==1.9.9
 django-pipeline==1.6.13
 enum34==1.1.6
 futures==3.2.0
@@ -11,6 +12,7 @@ idna==2.6
 ipaddress==1.0.19
 paypalrestsdk==1.13.1
 Pillow==5.0.0
+psycopg2==2.7
 pycparser==2.18
 pyOpenSSL==17.5.0
 pytz==2017.3
@@ -18,5 +20,6 @@ requests==2.18.4
 six==1.11.0
 sorl-thumbnail==12.4.1
 stripe==1.77.0
+typing==3.6.2
 urllib3==1.22
 virtualenv==15.1.0

@@ -15,27 +15,8 @@
 			{{ success|safe }}
 		</div>
 		{% else %}
-		<h3>Login details</h3>
+		<h3>Please fill all the data to register an account in {{SITE_NAME}}</h3>
 		<ul>
-			<li>
-				{{ form.username }}
-				{{ form.username.errors }}
-			</li>
-			<li>
-				{{ form.password }}
-				{{ form.password.errors }}
-			</li>
-			<li>
-				{{ form.confirm_password }}
-				{{ form.confirm_password.errors }}
-			</li>
-		</ul>
-		<h3>Peronsal details</h3>
-		<ul>
-			<li>
-				{{ form.email }}
-				{{ form.email.errors }}
-			</li>
 			<li>
 				{{ form.first_name }}
 				{{ form.first_name.errors }}
@@ -44,9 +25,27 @@
 				{{ form.last_name }}
 				{{ form.last_name.errors }}
 			</li>
-			<li class="gender">
-				{{ form.gender }}
-				{{ form.gender.errors }}
+			<li>
+				{{ form.email }}
+				{{ form.email.errors }}
+			</li>
+			{% comment %}
+			<li>
+				{{ form.username }}
+				{{ form.username.errors }}
+			</li>
+			{% endcomment %}
+			<li>
+				{{ form.password }}
+				{{ form.password.errors }}
+			</li>
+			<li>
+				{{ form.confirm_password }}
+				{{ form.confirm_password.errors }}
+			</li>
+			<li>
+				{{ form.terms_condition }} Please accept the terms and conditions before proceeding.
+				{{ form.terms_condition.errors }}
 			</li>
 			<li>
 				<input type="submit" value="Register"/>

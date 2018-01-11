@@ -1,0 +1,4 @@
+CREATE USER doorsale PASSWORD '*2?m@QL6ytjMC3*JX2P?E3yx@G!6EqwG';
+CREATE DATABASE doorsale OWNER doorsale;
+GRANT ALL PRIVILEGES ON DATABASE doorsale TO doorsale;
+ALTER ROLE doorsale SUPERUSER;

@@ -1,0 +1,38 @@
+
+{% load staticfiles %}
+            {% block content %}
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <!--Content-->
+                    <div class="row" style="height: 75px;">
+                        
+                    </div>
+                    <br>
+                    <div class="row title-login">
+                        <div class="col-lg-3 col-centered"><span class="title-login-pt1">&nbsp;</span><span class="title-login-pt2"></span></div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-7 col-centered">
+                            <ul class="list-group">
+                                <li class="list-group-item active form-title">{{ title }}</li>
+                                <li class="list-group-item">
+                                    <br>
+                                    <p>{{ motto }}</p>
+                                    <br>
+                                    <p>{{ info }}</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+            </div>
+            {% for message in messages %}
+            {% if message.tags == "success" %}
+            <script type="text/javascript">
+                setTimeout(function () {
+                    window.location.href = '{% url "catalog_index" %}'; //will redirect to your blog page (an ex: blog.html)
+                }, 3000);
+            </script>
+            {% endif %}
+            {% endfor %}
+            {% endblock %}

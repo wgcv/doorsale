@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'geo',
     'pages',
     'accounts',
@@ -87,10 +88,17 @@ LOGIN_REDIRECT_URL = '/'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+
+DATABASES_DEFAULT_PORT = '5432'
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'doorsale',
+        'USER': 'doorsale',
+        'PASSWORD': '*2?m@QL6ytjMC3*JX2P?E3yx@G!6EqwG',
+        'HOST': 'localhost',
+        'PORT': DATABASES_DEFAULT_PORT,
     }
 }
 
@@ -146,6 +154,8 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 # Pipeline finders for serving pipeline static files
 from django.conf.global_settings import STATICFILES_FINDERS
 STATICFILES_FINDERS += (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'pipeline.finders.PipelineFinder',
 )
 
@@ -257,3 +267,18 @@ PIPELINE = {
 PAGE_VIEWS = (('pages_base_page', 'Base View'),
               ('pages_catalog_page', 'Catalog View')
 )
+
+
+# Email with GMAIL
+DEFAULT_FROM_EMAIL = 'prueba.sm.email@gmail.com'
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_HOST_USER = 'prueba.sm.email@gmail.com'
+
+EMAIL_HOST_PASSWORD = 'j&kL3Qd39_ac*72q'
+
+EMAIL_PORT = 587
+

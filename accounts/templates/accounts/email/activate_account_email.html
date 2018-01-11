@@ -1,0 +1,23 @@
+{% load staticfiles %}{% load i18n %}{% autoescape off %}
+<!DOCTYPE html>
+<html xmlns:v="urn:schemas-microsoft-com:vml">
+<body>
+<table border="0" bgcolor="#908F8D" cellspacing="0" cellpadding="0" style="width: 100%; height: 100%; padding: 0; margin: 0; overflow: auto; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 14px; line-height: 1.42857143; color: grey;" width="100%" height="100%">
+    <tr>
+        <td>
+            <div bgcolor="#ffffff" style="background-color: #ffffff; padding: 7px; margin: 0 15px; border-radius: 5px; height: 100%;">
+                {% trans "Hi" %} {{ user.first_name }},
+                <br>
+                {% blocktrans %}Thanks for signing up at {{ site_name }}.{% endblocktrans %}
+                <br>
+                <p>Please click the following button to activate your account:</p>
+                <p style="text-align: center;"><a href="{{ domain }}{{ url }}" style="cursor: pointer; color: #ffd200; text-decoration: none;">ACTIVATE ACCOUNT</a></p>
+                <br>
+                <p>{% trans "Your username, in case you've forgotten:" %} <b>{{ user.get_username }}</b>.</p>   
+            </div>    
+        </td>
+    </tr>
+</table>
+</body>
+</html>
+{% endautoescape %}
