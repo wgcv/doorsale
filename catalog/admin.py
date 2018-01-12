@@ -3,6 +3,27 @@ from django.contrib import admin
 from doorsale_site.admin import ModelAdmin
 from catalog import models
 
+class FilterProductAdmin(ModelAdmin): 
+    
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user
+        obj.save()
+
+    def get_queryset(self, request): 
+        # For Django < 1.6, override queryset instead of get_queryset
+        qs = super(FilterProductAdmin, self).get_queryset(request) 
+        if request.user.is_superuser:
+            return qs.all()
+        else:
+            return qs.filter(created_by=request.user)
+
+    def has_change_permission(self, request, obj=None):
+        if not obj:
+            return True
+        try:
+            return obj.user == request.user
+        except Exception as e:
+            return True
 
 class ManufacturerAdmin(ModelAdmin):
     list_display = ( 'user', 'ruc', 'id_ministerio', 'razon_social')
@@ -20,7 +41,7 @@ class CategoryAdmin(ModelAdmin):
     date_hierarchy = 'created_on'
 
 
-class ProductAdmin(ModelAdmin):
+class ProductAdmin(FilterProductAdmin):
     list_display = ('name', 'brand', 'price', 'quantity', 'is_active', 'is_bestseller', 'is_featured',)
     list_filter = ('brand', 'is_active', 'is_bestseller', 'is_featured', 'is_free_shipping', 'created_on',)
     search_fields = ('name', 'gist', 'brand__name', 'sku', 'gtin', 'part_number',)
@@ -28,19 +49,18 @@ class ProductAdmin(ModelAdmin):
     date_hierarchy = 'created_on'
 
 
-class ProductSpecAdmin(ModelAdmin):
+class ProductSpecAdmin(FilterProductAdmin):
     list_display = ('product', 'name', 'value', 'display_order',)
     list_filter = ('name', 'created_on',)
     search_fields = ('name', 'value', 'product__name',)
     date_hierarchy = 'created_on'
 
 
-class ProductPicAdmin(ModelAdmin):
+class ProductPicAdmin(FilterProductAdmin):
     list_display = ('id', 'product', 'url', 'display_order',)
     list_filter = ('created_on',)
     search_fields = ('id', 'product__name', 'url',)
     date_hierarchy = 'created_on'
-
 
 admin.site.register(models.Manufacturer, ManufacturerAdmin)
 admin.site.register(models.Category, CategoryAdmin)
