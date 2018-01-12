@@ -69,7 +69,7 @@ class CatalogBaseView(BaseView):
         try:
             return int(cls.get_config('PAGE_SIZE'))
         except AttributeError:
-            return 1
+            return 10
 
 
 class IndexView(CatalogBaseView):
@@ -138,7 +138,7 @@ class ManufacturerProductsView(CatalogBaseView):
                                                          manufacturer=manufacturer,
                                                          products=products,
                                                          breadcrumbs=breadcrumbs,
-                                                         page_title=manufacturer.name)
+                                                         page_title=manufacturer.user.first_name)
 
 
 class SearchProductsView(CatalogBaseView):

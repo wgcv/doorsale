@@ -28,6 +28,7 @@ class UserManager(_UserManager):
                                          updated_by=email,
                                          created_by=email,
                                          is_active=True,
+                                         terms_condition=True,
                                          **extra_fields)
         else:
             user = self.create_user(username=email,
@@ -40,6 +41,7 @@ class UserManager(_UserManager):
                                     updated_by=email,
                                     created_by=email,
                                     is_active=False,
+                                    terms_condition=True,
                                     **extra_fields)
         return user
 

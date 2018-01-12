@@ -5,33 +5,37 @@ from django.db import models
 from django.db.models import Q
 
 from financial.models import Tax
-
+from geo.models import Country
+from doorsale_site import settings
 
 class Manufacturer(models.Model):
     """
     Represents a Manufacturer
     """
-    name = models.CharField(max_length=100, unique=True)
-    ruc = models.CharField(max_length=13, verbose_name='RUC/CI')
-    email = models.CharField(max_length=256, verbose_name='Correo Electrónico')
-    address = models.CharField(max_length=256, verbose_name='Dirección')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    # name = models.CharField(max_length=100, unique=True)
+    ruc = models.CharField(max_length=13, verbose_name='RUC/CI', unique=True)
+    # email = models.CharField(max_length=256, verbose_name='Correo Electrónico')
+    address_line1 = models.CharField(max_length=256, verbose_name='Dirección')
+    address_line2 = models.CharField(max_length=256, verbose_name='Dirección Referencia', blank=True)
     phone_number = models.CharField(max_length=10, verbose_name='Teléfono')
-    id_interno = models.CharField(max_length=256, verbose_name='Id Interna', blank=True)
+    razon_social = models.CharField(max_length=256, verbose_name='Razón Social', unique=True)
+    country = models.ForeignKey(Country)
+    id_ministerio = models.CharField(max_length=256, verbose_name='Identificador Ministerior', blank=True)
     marca_ecuador = models.BooleanField(default=False, blank=True)
-    razon_social = models.CharField(max_length=256, verbose_name='Razón Social')
-    slug = models.SlugField(max_length=100, unique=True)
-    description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
+
+    slug = models.SlugField(max_length=100, unique=True)
     pdated_on = models.DateTimeField(auto_now=True)
     updated_by = models.CharField(max_length=100)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.CharField(max_length=100)
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('user__username',)
 
     def __unicode__(self):
-        return self.name
+        return self.user.first_name
 
     @models.permalink
     def get_absolute_url(self):
@@ -41,7 +45,7 @@ class Manufacturer(models.Model):
         """
         Returns name and url dictionary tuple
         """
-        return ({'name': self.name, 'url': self.get_absolute_url()},)
+        return ({'name': self.user.first_name, 'url': self.get_absolute_url()},)
 
     @classmethod
     def get_manufacturers(cls):

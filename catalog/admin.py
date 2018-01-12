@@ -5,10 +5,10 @@ from catalog import models
 
 
 class ManufacturerAdmin(ModelAdmin):
-    list_display = ('name', 'description', 'is_active',)
-    prepopulated_fields = {'slug': ('name',)}
-    list_filter = ('is_active', 'created_on',)
-    search_fields = ('id', 'name', 'description',)
+    list_display = ( 'user', 'ruc', 'id_ministerio', 'razon_social')
+    prepopulated_fields = {'slug': ('razon_social',)}
+    list_filter = ('is_active', 'created_on', 'marca_ecuador', 'ruc', 'id_ministerio')
+    search_fields = ('id', )
     date_hierarchy = 'created_on'
 
 

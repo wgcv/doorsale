@@ -406,10 +406,12 @@ class CheckoutReceiptView(CheckoutBaseView):
         if order_confirmed:
             # Sending order confirmation email to user's billing email address
             context = Context(
-                {'order': order, 'user': request.user, 'SITE_NAME': self.get_config('SITE_NAME'), 'DOMAIN': self.get_config('DOMAIN')})
+                {'order': order, 'user': request.user, 'DOMAIN': "localhost:8000",
+            'SITE_NAME': 'Doorsale'})
             msg_subject = get_template("sales/email/order_confirmation_subject.txt").render(context)
             context = Context({'order': order, 'user': request.user,
-                               'SITE_NAME': self.get_config('SITE_NAME'), 'DOMAIN': self.get_config('SITE_NAME')})
+                               'DOMAIN': "localhost:8000",
+            'SITE_NAME': 'Doorsale'})
             msg_text = get_template("sales/email/order_confirmation.html").render(context)
             to_email = '%s <%s>' % (order.billing_address.get_name(), order.billing_address.email)
             send_mail(msg_subject, msg_text, [to_email], True)
