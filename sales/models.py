@@ -8,6 +8,7 @@ from geo.models import Address
 from catalog.models import Product
 from financial.models import Currency, Tax
 
+from sales.utils import get_last_id_as_order_receipt_id
 
 class Cart(models.Model):
     """
@@ -183,14 +184,20 @@ class PaymentMethod(models.Model):
     Represents payment methods for order
     """
     # Payment methods
-    COD = 'CO'
-    CHECK = 'CH'
+    # COD = 'CO'
+    # CHECK = 'CH'
     CREDIT_CARD = 'CC'
-    PURCHASE_ORDER = 'PO'
+    PAYPAL = 'PP'
+    BANK_DEPOSIT = 'BK'
+    ALL = ((CREDIT_CARD, 'Credit Card'),
+           (PAYPAL, 'PayPal'),
+           (BANK_DEPOSIT, 'Bank Deposit'))
+    """
     ALL = ((COD, 'Cash On Delivery'),
            (CHECK, 'Check / Money Order'),
            (CREDIT_CARD, 'Credit Card'),
            (PURCHASE_ORDER, 'Purchase Order'))
+    """
     ALL_METHODS = dict(ALL)
 
     code = models.CharField(primary_key=True, max_length=2, choices=ALL)
@@ -217,6 +224,7 @@ class PaymentMethod(models.Model):
 
 
 class OrderManager(models.Manager):
+
     def place(self, cart_id, billing_address_id, shipping_address_id, payment_method,
               po_number, currency_code, user, username):
         cart = Cart.get_cart(cart_id)
@@ -226,7 +234,8 @@ class OrderManager(models.Manager):
         currency = Currency.objects.get(code=currency_code)
         charge_amount = float(cart.get_total())
         charge_amount *= float(currency.exchange_rate)
-        receipt_code = get_random_string(20)  # allows secure access to order receipt
+        # receipt_code = get_random_string(20)  # allows secure access to order receipt
+        receipt_code = get_last_id_as_order_receipt_id(Order.objects.all().last())
 
         order = self.create(customer=user,
                             currency=currency,
@@ -331,7 +340,7 @@ class Order(models.Model):
     shipping_status = models.CharField(max_length=2, choices=SHIPPING_STATUSES)
     billing_address = models.ForeignKey(Address, related_name='billing_orders')
     shipping_address = models.ForeignKey(Address, related_name='shipping_orders', null=True, blank=True)
-    receipt_code = models.CharField(max_length=100, help_text="Random code generate for each order for secure access.")
+    receipt_code = models.CharField(max_length=100)
     updated_on = models.DateTimeField(auto_now=True)
     updated_by = models.CharField(max_length=100)
     created_on = models.DateTimeField(auto_now_add=True)

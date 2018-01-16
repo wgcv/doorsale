@@ -1,1 +1,1 @@
-Your Order #{{ order.id }} confirmation
+Your Order #{{ order.receipt_code }} confirmation

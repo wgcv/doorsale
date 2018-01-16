@@ -248,10 +248,10 @@ class Product(models.Model):
         Returns QuerySet of product search query
         """
         return cls.get_active().filter(Q(name__icontains=q) |
-                                       Q(category__name__icontains=q) |
-                                       Q(brand__name__icontains=q) |
-                                       Q(gist__icontains=q) |
-                                       Q(tags__icontains=q))
+                                      Q(category__name__icontains=q))
+                                      # Q(brand__name__icontains=q))
+                                      # Q(gist__icontains=q))
+                                      #  Q(tags__icontains=q))
 
     @classmethod
     def featured_products(cls):

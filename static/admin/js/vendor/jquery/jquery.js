@@ -5969,9 +5969,6 @@ function getWidthOrHeight( elem, name, extra ) {
 		// Support: IE11 only
 		// Running getBoundingClientRect on a disconnected node
 		// in IE throws an error.
-		if ( elem.getClientRects().length ) {
-			val = Math.round( elem.getBoundingClientRect()[ name ] * 100 );
-		}
 	}
 
 	// Some non-html elements return undefined for offsetWidth, so check for null/undefined
@@ -8937,7 +8934,7 @@ jQuery.expr.filters.visible = function( elem ) {
 	// Opera reports offsetWidths and offsetHeights less than zero on some elements
 	// Use OR instead of AND as the element is not visible if either is true
 	// See tickets #10406 and #13132
-	return elem.offsetWidth > 0 || elem.offsetHeight > 0 || elem.getClientRects().length > 0;
+	return elem.offsetWidth > 0 || elem.offsetHeight > 0;
 };
 
 

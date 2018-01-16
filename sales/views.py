@@ -13,7 +13,7 @@ from sales.models import Cart, Order, PaymentMethod
 from sales.forms import AddressForm
 from catalog.views import CatalogBaseView, get_default_currency
 from doorsale_site.views import BaseView
-from utils.helpers import send_mail
+# from utils.helpers import send_mail
 
 
 @transaction.atomic
@@ -291,21 +291,11 @@ class CheckoutPaymentView(CheckoutBaseView):
         payment_method = request.POST.get('payment_method', None)
         payment_methods = dict(PaymentMethod.ALL)
         if payment_method and payment_method in payment_methods:
+            if 'po_number' in request.session:
+                del request.session['po_number']
 
-            if payment_method == PaymentMethod.PURCHASE_ORDER:
-                po_number = request.POST['po_number']
-                if po_number:
-                    request.session['po_number'] = po_number
-                    request.session['payment_method'] = payment_method
-                    return HttpResponseRedirect(reverse('sales_checkout_order'))
-                else:
-                    error = 'Please provide purchase order number.'
-            else:
-                if 'po_number' in request.session:
-                    del request.session['po_number']
-
-                request.session['payment_method'] = payment_method
-                return HttpResponseRedirect(reverse('sales_checkout_order'))
+            request.session['payment_method'] = payment_method
+            return HttpResponseRedirect(reverse('sales_checkout_order'))
         else:
             error = 'Please select payment method'
 
@@ -414,7 +404,7 @@ class CheckoutReceiptView(CheckoutBaseView):
             'SITE_NAME': 'Doorsale'})
             msg_text = get_template("sales/email/order_confirmation.html").render(context)
             to_email = '%s <%s>' % (order.billing_address.get_name(), order.billing_address.email)
-            send_mail(msg_subject, msg_text, [to_email], True)
+            # send_mail(msg_subject, msg_text, [to_email], True)
 
         self.order_id = order_id
         self.receipt_code = receipt_code
