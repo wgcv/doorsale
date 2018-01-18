@@ -48,6 +48,10 @@ class ProductAdmin(FilterProductAdmin):
     prepopulated_fields = {'slug': ('name',)}
     date_hierarchy = 'created_on'
 
+    def render_change_form(self, request, context, *args, **kwargs):
+        if not request.user.is_superuser:
+            context['adminform'].form.fields['brand'].queryset = models.Manufacturer.objects.filter(user=request.user)
+        return super(ProductAdmin, self).render_change_form(request, context, args, kwargs)
 
 class ProductSpecAdmin(FilterProductAdmin):
     list_display = ('product', 'name', 'value', 'display_order',)
@@ -55,12 +59,22 @@ class ProductSpecAdmin(FilterProductAdmin):
     search_fields = ('name', 'value', 'product__name',)
     date_hierarchy = 'created_on'
 
+    def render_change_form(self, request, context, *args, **kwargs):
+        if not request.user.is_superuser:
+            context['adminform'].form.fields['product'].queryset = models.Product.objects.filter(brand__user=request.user)
+        return super(ProductSpecAdmin, self).render_change_form(request, context, args, kwargs)
 
 class ProductPicAdmin(FilterProductAdmin):
+    # product
     list_display = ('id', 'product', 'url', 'display_order',)
     list_filter = ('created_on',)
     search_fields = ('id', 'product__name', 'url',)
     date_hierarchy = 'created_on'
+
+    def render_change_form(self, request, context, *args, **kwargs):
+        if not request.user.is_superuser:
+            context['adminform'].form.fields['product'].queryset = models.Product.objects.filter(brand__user=request.user)
+        return super(ProductPicAdmin, self).render_change_form(request, context, args, kwargs)
 
 admin.site.register(models.Manufacturer, ManufacturerAdmin)
 admin.site.register(models.Category, CategoryAdmin)
