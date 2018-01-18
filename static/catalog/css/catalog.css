@@ -142,12 +142,17 @@ a:hover.button {
 .error-message {
   color: maroon;
 }
-header {
-  padding: 0px 15px;
-  background: #1a86c6;
-  color: white;
+.navbar {
+  z-index: 1001;
 }
-header .logo {
+.menu {
+  position: absolute;
+  top: 96px;
+  right: 0;
+  z-index: 1000;
+  padding: 1.5rem;
+}
+.logo {
   display: inline-block;
   padding: 5px 0px;
   margin-top: 14px;
@@ -156,27 +161,30 @@ header .logo {
   text-indent: -9999em;
   overflow: hidden;
 }
-header .logo h1 {
+.logo h1 {
   color: white !important;
   float: left;
 }
-header a {
+a {
   color: whitesmoke;
 }
-header a:hover {
+a:hover {
   color: white;
   text-decoration: none !important;
 }
-header #menu {
+#menu {
   float: right;
 }
-header #menu li {
+#menu li {
   float: left;
-  padding: 20px 10px;
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0 1rem;
+  /* border-left: 1px solid rgba(255, 255, 255, 0.2); */
 }
-header #menu li:first-child {
+#menu li:first-child {
   border-left: none;
+}
+#menu .search-box {
+  margin: 0.5rem;
 }
 h2 {
   font-size: 1.4em;

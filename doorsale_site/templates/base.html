@@ -31,46 +31,62 @@
 
 {% block body %}
 {{ block.super }}
-<header>
+<nav class="navbar navbar-dark bg-dark">
 	{% block header-content %}
 	{% block header-logo %}
 	<a href="{% url 'catalog_index' %}" class="logo"><h1>{{ SITE_NAME }}</h1></a>
 	{% endblock %}
-	<ul id="menu">
-		{% block header-menu-list %}
-		{% if user.is_authenticated %}
-		<li>Welcome! {{ user.get_username }}</li>
-		{% if user.is_staff %}
-		<li><a href="/admin/">Admin</a></li>
-		{% endif %}
-		<li><a href="{% url 'accounts_change_password' %}">Change password</a> | <a href="{% url 'accounts_logout' %}">Logout</a></li>
-		{% else %}
-		<li><a href="{% url 'accounts_login' %}">Login</a></li>
-		<li><a href="{% url 'accounts_register' %}" title="Register to shop faster and better!">Register</a></li>
-		{% endif %}
+	<div>
+		<ul id="menu">
+			{% block header-menu-list %}
+			{% endblock %}
+			<li>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			</li>
+		</ul>
 		{% endblock %}
-	</ul>
-	{% endblock %}
-</header>
-<div id="content">
-	{% block content %}
-	{% endblock %}
-</div>
-<footer>
-	{% block footer %}
-	{% cache cache_timeout page-links %}
-	{% get_pages_links %}
-	<div class="copyright">
-		<p>
-			<span class="statement">{{ COPYRIGHT|safe }}</span> <span class="poweredby">Powered by <a href="https://github.com/mysteryjeans/doorsale">Doorsale</a></span>
-		<p>
+		<div class="collapse" id="navbarToggleExternalContent">
+			<div class="bg-dark menu">
+				{% if user.is_authenticated %}
+				<h4 class="text-white">Collapsed content</h4>
+				<span class="text-muted">Bienvenido {{ user.get_username }}.</span>
+
+				<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+					{% if user.is_staff %}
+					<a class="nav-link" href="/admin/">Admin</a>
+					{% endif %}
+					<a class="nav-link" href="{% url 'accounts_change_password' %}">Change password</a>
+					<a class="nav-link" href="{% url 'accounts_logout' %}">Logout</a>
+					{% else %}
+					<a class="nav-link" href="{% url 'accounts_login' %}">Login</a>
+					<a class="nav-link" href="{% url 'accounts_register' %}" title="Register to shop faster and better!">Register</a>
+					{% endif %}
+
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div id="content">
+		{% block content %}
+		{% endblock %}
 	</div>
-	{% endcache %}
-	{% endblock %}
-</footer>
-{% block scripts %}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script>
-{% javascript 'base' %}
-{% endblock %}
-{% endblock %}
+	<footer>
+		{% block footer %}
+		{% cache cache_timeout page-links %}
+		{% get_pages_links %}
+		<div class="copyright">
+			<p>
+				<span class="statement">{{ COPYRIGHT|safe }}</span> <span class="poweredby">Powered by <a href="https://github.com/mysteryjeans/doorsale">Doorsale</a></span>
+				<p>
+				</div>
+				{% endcache %}
+				{% endblock %}
+			</footer>
+			{% block scripts %}
+			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+			<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script>
+			{% javascript 'base' %}
+			{% endblock %}
+			{% endblock %}

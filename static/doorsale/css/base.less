@@ -2,11 +2,16 @@
 
 @header-color: @second-color;
 
-header {
-  padding: 0px 15px;
-  background: @header-color;
-  color: white;
-
+  .navbar{
+    z-index: 1001;
+  }
+  .menu {
+    position: absolute;
+    top: 96px;
+    right: 0;
+    z-index: 1000;
+    padding: 1.5rem;
+  }
   .logo {
     display: inline-block;
     padding: 5px 0px;
@@ -36,15 +41,18 @@ header {
 
     li {
       float: left;
-      padding: 20px 10px;
-      border-left: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0 1rem;
+      /* border-left: 1px solid rgba(255, 255, 255, 0.2); */
     }
 
     li:first-child {
       border-left: none;
     }
+    .search-box {
+          margin: 0.5rem;
+    }
   }
-}
+
 
 h2 {
   font-size: 1.4em;
