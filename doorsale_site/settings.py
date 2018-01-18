@@ -224,7 +224,7 @@ PIPELINE = {
         'base': {
             'source_filenames': (
                 'doorsale/scripts/jquery-ajax.js',
-               # 'doorsale/scripts/jquery-utils.js',
+                'doorsale/scripts/jquery-utils.js',
                 'doorsale/scripts/popper.js',
                 'doorsale/scripts/bootstrap.js',
             ),
