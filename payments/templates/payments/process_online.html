@@ -13,7 +13,7 @@
     </ul>
     {% if form %}
     <div id="payment-credit-card" class="credit-card action-form">
-        <form method="post" data-ajax="true" action="{% url 'payments_process_credit_card' order.id order.receipt_code %}" data-ajax-update="#payment-options-container" data-ajax-loading="#process-credit-card">
+        <form method="post">
             {% csrf_token %}
             {{ form.gateway }}
             <ul>
@@ -49,7 +49,7 @@
                 </li>
                 <li class="pay-botton-container">
                     <i id="process-credit-card" class="fa fa-spinner fa-lg fa-spin"></i>
-                    <input type="submit" value="Pay {{ order.total|currency:default_currency }}" class="pay-button" onclick="javascript:$(this).attr('disabled','disabled');" />
+                    <input type="submit" value="Pay {{ order.total|currency:default_currency }}" class="pay-button"/>
                 </li>
             </ul>
             {{ form.card_type }}

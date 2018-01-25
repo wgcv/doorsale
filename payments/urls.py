@@ -1,11 +1,11 @@
 from django.conf.urls import url
 
 from payments.views import process_online, process_credit_card, \
-    process_account_request, process_account_response, ProcessingMessageView
+    process_account_request, process_account_response, ProcessingMessageView, ProcessOnlineView
 
 urlpatterns = [
-    url(r'^process_online/(?P<order_id>\d+)-(?P<receipt_code>\w+)/$',
-        process_online, name='payments_process_online'),
+    url(r'^process_online/(?P<order_id>[\d]+)/(?P<receipt_code>[\w]+)/$', ProcessOnlineView.as_view(), name='payments_process_online'),
+    url(r'^process_online/$', ProcessOnlineView.as_view(), name='payments_process_online'),
     url(r'^process_credit_card/(?P<order_id>\d+)-(?P<receipt_code>\w+)/$',
         process_credit_card, name='payments_process_credit_card'),
     url(r'^process_account/request/(?P<order_id>\d+)-(?P<receipt_code>\w+)/$',

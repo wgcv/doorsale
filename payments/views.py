@@ -6,15 +6,61 @@ from django.core.urlresolvers import reverse
 
 from sales.models import Order
 from catalog.views import CatalogBaseView, get_default_currency
+from django.views.generic import View
+from django.views.generic.base import TemplateView
 from payments.forms import CreditCardForm
 from payments.models import Gateway, Transaction, TransactionParam
 from payments.processors import PayPal, Stripe
 
+class ProcessOnlineView(TemplateView):
+    """
+    Shows payment processing message or error
+    """
+    catalog_template_name = 'catalog/catalog_base.html'
+    template_name = 'payments/process_online.html'
+
+    def post(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse('sales_checkout_receipt', args=[kwargs['order_id'], kwargs['receipt_code']]))
+
+    def get(self, request, order_id=None, receipt_code=None, *arg, **kwargs):
+        if kwargs.get('order_id', None):
+            self.order_id = self.kwargs['order_id']
+        if kwargs.get('receipt_code', None):
+            self.receipt_code = self.kwargs['receipt_code']
+        if request.method == 'GET':
+            self.form = None
+            self.gateways = Gateway.get_gateways()
+            self.order = get_object_or_404(Order, id=order_id, receipt_code=receipt_code)
+            self.default_currency = get_default_currency(request)
+
+            for self.gateway in self.gateways:
+                if self.gateway.accept_credit_card:
+                    self.form = CreditCardForm(initial={'gateway': self.gateway})
+        return super(ProcessOnlineView, self).get(request, order_id, receipt_code, *arg, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ProcessOnlineView, self).get_context_data(**kwargs)
+        context['form'] = self.form
+        context['order'] = self.order
+        context['gateways'] = self.gateways
+        context['default_currency'] = self.default_currency
+        context['catalog_template_name'] = self.catalog_template_name
+
+        context['SITE_NAME'] = 'Doorsale'
+        context['SITE_TITLE'] = 'Doorsale'
+        context['SITE_DESCRIPTION'] = 'Doorsale'
+        context['COPYRIGHT'] = 'Doorsale'
+        context['SUPPORT_EMAIL'] = 'Doorsale'
+
+        if hasattr(self, 'page_title'):
+            context['page_title'] = self.page_title
+        return context
 
 def process_online(request, order_id, receipt_code):
     """
     Shows online or process online payment
     """
+    checkout_template_name = 'sales/checkout_base.html'
     if request.method == 'GET':
         form = None
         gateways = Gateway.get_gateways()
@@ -26,7 +72,7 @@ def process_online(request, order_id, receipt_code):
                 form = CreditCardForm(initial={'gateway': gateway})
 
         return render(request, 'payments/process_online.html',
-                      {'form': form, 'order': order, 'gateways': gateways, 'default_currency': default_currency})
+                      {'form': form, 'order': order, 'gateways': gateways, 'default_currency': default_currency, 'checkout_template_name':checkout_template_name,})
 
     raise Http404
 

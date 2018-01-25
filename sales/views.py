@@ -361,9 +361,9 @@ class CheckoutOrderView(CheckoutBaseView):
             request.session['order_confirmed'] = True
 
             if payment_method == PaymentMethod.CREDIT_CARD:
-                return HttpResponseRedirect(reverse('payments_process_online', args=[order.id, order.receipt_code]))
-
-            return HttpResponseRedirect(reverse('sales_checkout_receipt', args=[order.id, order.receipt_code]))
+                return HttpResponseRedirect(reverse('payments_process_online', kwargs={"order_id":order.id, "receipt_code":order.receipt_code}))
+            else:
+                return HttpResponseRedirect(reverse('sales_checkout_receipt', args=[order.id, order.receipt_code]))
 
         except Exception as e:
             error = e.message
