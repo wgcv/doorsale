@@ -113,22 +113,21 @@
 		<button id="checkout_login" title="Proceed place order" type="button" class="button btn btn-info btn-lg checkout" data-toggle="modal" data-target="#myModal"><i class="fa fa-shopping-cart"></i>Checkout</button>
 
 		<div class="modal fade" id="myModal" role="dialog">
-		    <div class="modal-dialog">
-		      <!-- Modal content-->
-		      <div class="modal-content">
-		        <div class="modal-header">
-		          <button type="button" class="close" data-dismiss="modal">&times;</button>
-		          <h4 class="modal-title" style="float: left;">{{SITE_NAME}}</h4>
-		        </div>
-		        <div class="modal-body" style="height: 60px;">
-		        	<label>You have to be logged in on {{SITE_NAME}} to checkout and buy your products.<br>Please loggin in or if you don't have an account, register yourself.</label>
-		        </div>
-		        <div class="modal-footer">
-		        	<a class="btn btn-default" href="{% url 'accounts_login' %}">Login</a>
-		        	<a class="btn btn-default" href="{% url 'accounts_register' %}" title="Register to shop faster and better!">Register</a>
-		        </div>
-		      </div>
-		    </div>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title" style="float: left;">{{SITE_NAME}}</h4>
+					</div>
+					<div class="modal-body" style="height: 60px;">
+						<label>You have to be logged in on {{SITE_NAME}} to checkout and buy your products.<br>Please loggin in or if you don't have an account, register yourself.</label>
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-default" href="{% url 'accounts_login' %}">Login</a>
+						<a class="btn btn-default" href="{% url 'accounts_register' %}" title="Register to shop faster and better!">Register</a>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		{% endif %}
