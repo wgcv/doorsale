@@ -118,10 +118,10 @@
 		      <div class="modal-content">
 		        <div class="modal-header">
 		          <button type="button" class="close" data-dismiss="modal">&times;</button>
-		          <h4 class="modal-title">{{SITE_NAME}}</h4>
+		          <h4 class="modal-title" style="float: left;">{{SITE_NAME}}</h4>
 		        </div>
-		        <div class="modal-body">
-		        	<label>You have to be logged in on {{SITE_NAME}} to checkout and buy your products.</label>
+		        <div class="modal-body" style="height: 60px;">
+		        	<label>You have to be logged in on {{SITE_NAME}} to checkout and buy your products.<br>Please loggin in or if you don't have an account, register yourself.</label>
 		        </div>
 		        <div class="modal-footer">
 		        	<a class="btn btn-default" href="{% url 'accounts_login' %}">Login</a>
