@@ -1,80 +1,272 @@
 {% load catalog_filters %}
 
-<div id="payment-options">
-    <ul>
-        {% if form %}
-        <li><a href="#payment-credit-card">Credit Card</a></li>
-        {% endif %}
-        {% for gateway in gateways %}
-        {% if gateway.accept_account %}
-        <li><a href="#payment-{{ gateway.get_name_display }}">{{ gateway.get_name_display }}</a></li>
-        {% endif %}
-        {% endfor %}
-    </ul>
-    {% if form %}
-    <div id="payment-credit-card" class="credit-card action-form">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.gateway }}
-            <ul>
-                {% if error %}
-                <li class="error-message-box">
-                    {{ error }}
-                </li>
+<style type="text/css">
+    /* Padding - just for asthetics on Bootsnipp.com */
+    body { margin-top:20px; }
+
+    /* CSS for Credit Card Payment form */
+    .credit-card-box .panel-title {
+        display: inline;
+        font-weight: bold;
+    }
+    .credit-card-box .form-control.error {
+        border-color: red;
+        outline: 0;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(255,0,0,0.6);
+    }
+    .credit-card-box label.error {
+      font-weight: bold;
+      color: red;
+      padding: 2px 8px;
+      margin-top: 2px;
+    }
+    .credit-card-box .payment-errors {
+      font-weight: bold;
+      color: red;
+      padding: 2px 8px;
+      margin-top: 2px;
+    }
+    .credit-card-box label {
+        display: block;
+    }
+    /* The old "center div vertically" hack */
+    .credit-card-box .display-table {
+        display: table;
+    }
+    .credit-card-box .display-tr {
+        display: table-row;
+    }
+    .credit-card-box .display-td {
+        display: table-cell;
+        vertical-align: middle;
+        width: 50%;
+    }
+    /* Just looks nicer */
+    .credit-card-box .panel-heading img {
+        min-width: 180px;
+    }
+    #cc{
+        margin-top: 60px !important;
+    }
+</style>
+<script type="text/javascript">
+    /*
+    The MIT License (MIT)
+
+    Copyright (c) 2015 William Hilton
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+    */
+    var $form = $('#payment-form');
+    /* Fancy restrictive input formatting via jQuery.payment library*/
+    $('input[name=card_number]').payment('formatCardNumber');
+    $('input[name=cvv2]').payment('formatCardCVC');
+    $('input[name=expire_date').payment('formatCardExpiry');
+
+    jQuery.validator.addMethod("card_number", function(value, element) {
+        return this.optional(element);
+    }, "Please specify a valid credit card number.");
+
+    jQuery.validator.addMethod("expire_date", function(value, element) {    
+        /* Parsing month/year uses jQuery.payment library */
+        value = $.payment.cardExpiryVal(value);
+        return this.optional(element);
+    }, "Invalid expiration date.");
+
+    jQuery.validator.addMethod("cvv2", function(value, element) {
+        return this.optional(element);
+    }, "Invalid CVC.");
+
+    validator = $form.validate({
+        rules: {
+            card_number: {
+                required: true,
+                card_number: true            
+            },
+            expire_date: {
+                required: true,
+                expire_date: true
+            },
+            cvv2: {
+                required: true,
+                cvv2: true
+            }
+        },
+        highlight: function(element) {
+            $(element).closest('.form-control').removeClass('success').addClass('error');
+        },
+        unhighlight: function(element) {
+            $(element).closest('.form-control').removeClass('error').addClass('success');
+        },
+        errorPlacement: function(error, element) {
+            $(element).closest('.form-group').append(error);
+        }
+    });
+
+    paymentFormReady = function() {
+        if ($form.find('[name=card_number]').hasClass("success") &&
+            $form.find('[name=expire_date]').hasClass("success") &&
+            $form.find('[name=cvv2]').val().length > 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    $form.find('.subscribe').prop('disabled', true);
+    var readyInterval = setInterval(function() {
+        if (paymentFormReady()) {
+            $form.find('.subscribe').prop('disabled', false);
+            clearInterval(readyInterval);
+        }
+    }, 250);
+</script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.payment/1.2.3/jquery.payment.min.js"></script>
+
+<div class="container">
+    <div class="row">
+        <!-- You can make it whatever width you want. I'm making it full width
+             on <= small devices and 4/12 page width on >= medium devices -->
+        <div id="cc" class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
+        
+        
+            <!-- CREDIT CARD FORM STARTS HERE -->
+            <div class="panel panel-default credit-card-box">
+                <div class="panel-heading display-table" >
+                    <div class="row display-tr" >
+                        {% if form %}
+                        <h3 class="panel-title display-td" >Credit Card</h3>
+                        {% endif %}
+                        <div class="display-td" >                            
+                            <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png">
+                        </div>
+                        {% for gateway in gateways %}
+                        {% if gateway.accept_account %}
+                        <a href="#payment-{{ gateway.get_name_display }}">{{ gateway.get_name_display }}</a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if form %}
+                <div class="panel-body">
+                    <form role="form" id="payment-form" method="POST">
+                        {% csrf_token %}
+                        {{ form.gateway }}
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        {{ form.card_name }}
+                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    </div>
+                                </div>                            
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        {{ form.card_number }}
+                                        <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                                    </div>
+                                </div>                            
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-7 col-md-7">
+                                <div class="form-group">
+                                    {{ form.expire_date }}
+                                </div>
+                            </div>
+                            <div class="col-xs-5 col-md-5 pull-right">
+                                <div class="form-group">
+                                    {{ form.cvv2 }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <input type="submit" value="Pay {{ order.total|currency:default_currency }}" class="subscribe btn btn-success btn-lg btn-block"/>
+                            </div>
+                        </div>
+                        <div class="row" style="display:none;">
+                            <div class="col-xs-12">
+                                <p class="payment-errors"></p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 {% endif %}
-                <li>
-                    <i class="fa fa-user"></i>
-                    {{ form.card_name }}
-                    {{ form.card_name.errors }}
-                </li>
-                <li>
-                    <i class="fa fa-credit-card"></i>
-                    {{ form.card_number }}
-                    <i class="fa fa-check"></i>
-                    {{ form.card_number.errors }}
-                    {{ form.card_type.errors }}
-                </li>
-                <li class="dual-input">
-                    <span>
-                        <i class="fa fa-calendar-o"></i>
-                        {{ form.expire_date }}
-                    </span>
-                    <span>
-                        <i class="fa fa-lock fa-lg"></i>
-                        {{ form.cvv2 }}
-                    </span>
-                    <br/>
-                    {{ form.expire_date.errors }}
-                    {{ form.cvv2.errors }}
-                </li>
-                <li class="pay-botton-container">
-                    <i id="process-credit-card" class="fa fa-spinner fa-lg fa-spin"></i>
-                    <input type="submit" value="Pay {{ order.total|currency:default_currency }}" class="pay-button"/>
-                </li>
-            </ul>
-            {{ form.card_type }}
-        </form>
+            </div>            
+            <!-- CREDIT CARD FORM ENDS HERE -->
+        </div>        
     </div>
-    {% endif %}
-    {% for gateway in gateways %}
-    {% if gateway.accept_account %}
-    <div id="payment-{{ gateway.get_name_display }}" class="action-form online-account" >
-        <form method="post" action="{% url 'payments_process_account_request' order.id order.receipt_code %}">
-            {% csrf_token %}
-            <input type="hidden" name="gateway_name" value="{{ gateway.name }}"/>
-            <ul>
-                <li class="info-message-box">
-                    Check out with your existing {{ gateway.get_name_display }} account.
-                </li>
-                <li class="pay-botton-container">
-                   <input type="submit" value="Pay {{ order.total|currency:default_currency }}" class="pay-button" />
-                </li>
-            </ul>
-        </form>
-    </div>
-    {% endif %}
-    {% endfor %}
 </div>
+
+{% if gateways %}
+<div class="container">
+    <div class="row">
+        <!-- You can make it whatever width you want. I'm making it full width
+             on <= small devices and 4/12 page width on >= medium devices -->
+        <div id="cc" class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
+            <!-- CREDIT CARD FORM STARTS HERE -->
+            <div class="panel panel-default credit-card-box">
+                {% for gateway in gateways %}
+                {% if gateway.accept_account %}
+                <div class="panel-body">
+                    <form role="form" id="payment-form" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="hidden" name="gateway_name" value="{{ gateway.name }}"/>
+                                        Check out with your existing {{ gateway.get_name_display }} account.
+                                    </div>
+                                </div>                            
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <input type="submit" value="Pay {{ order.total|currency:default_currency }}" class="subscribe btn btn-success btn-lg btn-block" />
+                            </div>
+                        </div>
+                        <div class="row" style="display:none;">
+                            <div class="col-xs-12">
+                                <p class="payment-errors"></p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>            
+            <!-- CREDIT CARD FORM ENDS HERE -->
+        </div>        
+    </div>
+</div>
+{% endif %}
+
+{% comment %}
 <script type="text/javascript">
     // Detect Credit Card Type by Card Number and
     // fills appropiate type automatically in Card Type
@@ -112,3 +304,4 @@
     $('#id_expire_date').mask('09 / 99', {placeholder: '_'});
     $('#id_cvv2').mask('999?9', {placeholder: ' '});
 </script>
+{% endcomment %}

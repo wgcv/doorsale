@@ -45,15 +45,6 @@ class ProcessOnlineView(TemplateView):
         context['gateways'] = self.gateways
         context['default_currency'] = self.default_currency
         context['catalog_template_name'] = self.catalog_template_name
-
-        context['SITE_NAME'] = 'Doorsale'
-        context['SITE_TITLE'] = 'Doorsale'
-        context['SITE_DESCRIPTION'] = 'Doorsale'
-        context['COPYRIGHT'] = 'Doorsale'
-        context['SUPPORT_EMAIL'] = 'Doorsale'
-
-        if hasattr(self, 'page_title'):
-            context['page_title'] = self.page_title
         return context
 
 def process_online(request, order_id, receipt_code):

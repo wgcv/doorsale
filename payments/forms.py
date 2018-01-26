@@ -15,15 +15,20 @@ class CreditCardForm(forms.Form):
 
     gateway = forms.ModelChoiceField(queryset=Gateway.objects.filter(is_active=True, accept_credit_card=True),
                                      empty_label=None, widget=forms.HiddenInput())
-    card_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'placeholder': 'Name...'}),
+    card_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'placeholder': 'Name on card'}),
                                 error_messages={'required': 'Please specify name on credit card.'})
-    card_number = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'Number...'}),
+    card_number = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'Card Number'}),
                                   error_messages={'required': 'Please specify credit card number.'})
     card_type = forms.CharField(widget=forms.HiddenInput(), required=False)
-    expire_date = forms.CharField(max_length=7, widget=forms.TextInput(attrs={'placeholder': 'MM / YY'}),
+    expire_date = forms.CharField(max_length=7, widget=forms.TextInput(attrs={'placeholder': 'MM/YYYY'}),
                                   error_messages={'required': 'Please specify card expiry date'})
-    cvv2 = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'placeholder': 'CVV2...'}),
+    cvv2 = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'placeholder': 'CVV'}),
                            error_messages={'required': 'Please specify card security code'})
+
+    def __init__(self, *args, **kw):
+        super(CreditCardForm, self).__init__(*args, **kw)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
 
     def clean_card_number(self):
         card_number = self.cleaned_data['card_number'].replace(' ', '')
