@@ -48,7 +48,7 @@ class Gateway(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_by = models.CharField(max_length=100)
     created_by = models.CharField(max_length=100)
-
+                
     def __unicode__(self):
         return '%s -- %s' % (self.get_name_display(), self.account)
 
